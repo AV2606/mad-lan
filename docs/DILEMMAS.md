@@ -26,6 +26,7 @@ Every non-obvious call in this project, with the options considered and why one 
 - **Decision:** n ≥ 5 to show any range. Widen neighborhood → city in 4 steps, and always say so.
 - **Why:** Most neighborhoods have 1–5 deals. Without widening, almost every question returns "insufficient". Without disclosure, widening is misleading.
 - **Open:** 5 is a judgment call, not a statistic. Confidence thresholds (F3) are hand-tuned; this is "the part I'm least happy with".
+- **Measured (M2):** asking about each of the 109 neighborhoods with no other filters: 60 widen to the whole city, and confidence comes out 97 low, 12 medium, **0 high**. "High" is only reachable for city-level questions. That is honest for this data (most neighborhoods have 1–5 deals), but it means the badge rarely differentiates at neighborhood level.
 
 ### #10 No time adjustment · Decided
 - **Context:** Deals span 2021-01 to 2026-07. Israeli prices moved a lot in that period. A price index isn't in the CSV ("some of what you need isn't in the CSV at all").
@@ -57,6 +58,7 @@ Every non-obvious call in this project, with the options considered and why one 
 - **Decision:** Median ± 3×MAD per city (city n ≥ 8), else global bounds ₪8K–₪130K/m².
 - **Why:** MAD is robust with ~20–30 deals per city. Fixed bounds alone would either flag real Tel Aviv prices (~₪100K/m²) or miss a ₪140K/m² deal in Pisgat Ze'ev.
 - **Cost:** A real luxury deal may be flagged. It's excluded from stats but visible, never hidden.
+- **Measured on the data (M1):** k=3 flags 12 deals, not just the 3 obvious ones (D100001, D100193, D100160 at 6.1–6.7 MADs). The other 9 sit at 3.1–4.3 MADs and look like plausible deals (e.g. D100132, a Netanya penthouse at ₪58K/m²). k=4 would flag 4, k=5 exactly the 3. **Kept k=3 by explicit choice**; revisit if thin neighborhoods look too empty.
 
 ### #8 Flag vs delete contradictory rows · Decided
 - **Context:** Garden apartment (דירת גן) on floor 16; "new from contractor" (חדש מקבלן) built in 1950; 23 m² duplex.
@@ -79,6 +81,7 @@ Every non-obvious call in this project, with the options considered and why one 
 ### #20 Missing price per m² in the source · Decided
 - **Decision:** Ignore the given `price_per_sqm` column and recompute from price and size. Rows with a mismatch > 2% are flagged.
 - **Why:** The column is derived data, and it's already wrong in at least one row (D100317: 18,000 / 132 m² ≠ 0).
+- **Measured (M1):** 28 rows disagree with price ÷ size by more than 2%, far beyond the 4 conflicting duplicates. Some differ by 20%+ (D100178: 55,169 computed vs 68,592 given), so the column can't be trusted as a cross-check outside the duplicate tie-break.
 
 ---
 
@@ -123,3 +126,36 @@ Every non-obvious call in this project, with the options considered and why one 
 - **Context:** Each question = up to 2 Groq calls (parse + narrate); each investigation = 1.
 - **Decision:** No caching. Handle 429 gracefully (F7).
 - **Why:** Evaluator traffic is tiny. Groq's limits and pricing make this negligible.
+
+---
+
+## Decisions made during the build
+
+### #23 Requests with a plan never call the model · Decided
+- **Context:** F4 says a replayed receipt "may be worded differently" (implies a narration call); F7's test says "`/api/ask` with a plan: no Groq call made"; the manual-form test case says "without any Groq call".
+- **Decision:** A request that arrives with a plan (manual form, receipt link, CSM replay) makes **no** model call. The explanation is the labeled template ("הסבר אוטומטי").
+- **Why:** Two of the three specs said so, it keeps replays fast and free, and it means the CSM's replay can't fail because of the model.
+- **Cost:** A receipt opened from a link shows template wording rather than the wording the customer saw. The numbers are identical.
+
+### #24 Failure simulation can target one stage · Decided
+- **Context:** F7 says `simulate=down` still shows numbers with a template explanation. USER_TEST_CASES says it opens the manual form. Both are right, for different stages: parse failing opens the form, narration failing keeps the numbers.
+- **Decision:** `?simulate=` hits every model call by default (so parse fails first and the form opens). Adding `&stage=narrate` (or `parse`) aims it at one call.
+- **Why:** "Model fails, numbers still shown" is the best failure demo, and it needs a way to get past a working parse.
+
+### #25 CSM: the code extracts the customer's claim, not the LLM · Decided (deviation from F5)
+- **F5 said:** the LLM extracts `claimedPriceNis`, street, date; code then searches for the deal.
+- **Decision:** Code extracts the claim (prices with the same extractor the number guard uses, streets by matching known street names). The LLM gets the matched deals as input and returns only causes and texts.
+- **Why:** Keeps "the LLM never produces a number", avoids a second model call (the search has to happen *before* the LLM writes anything), and is testable.
+- **Match strength (found by running it live):** a price alone is weak evidence, since many deals sit within 3% of any price. A match is "strong" only when price **and** a street named in the complaint agree. A price with no street is reported as "can't verify". Even a strong match is worded "כנראה" (probably), because the date can't be checked ("a month ago").
+- **Street matching:** a street must not be part of a longer word (`הרצל` is not `הרצליה`).
+
+### #26 What the model is told is part of the design · Decided
+- Live runs showed the model inventing rationale and conflating fields. Fixes: the facts now include the real exclusion explanation and `priceUsedInstead`; the user's asking price is named `askingPriceEnteredByUser` (the model had presented it as our estimate); a `complaintHasDetails` flag stops it from attributing claims to a customer who wrote "you're terrible".
+- Code rejects (and falls back to the template) reply drafts that contain jargon, blame, promises, English words, the word "average" for a median, more than 6 sentences, or a number not in the facts or the complaint.
+- **Known remaining weakness:** the model sometimes states a strong match without hedging. The check text says "כנראה" and the prompt asks it to keep the hedge, but it isn't enforced in code. The draft is labeled a draft for the CSM to edit.
+
+### #27 Client timeout is 25s, not 20s · Decided
+- F7 said 20s. The server's worst case is parse (10s) + narrate (10s), so a 20s client would abort a legitimate slow answer. Set to 25s.
+
+### #28 `places.json` · Decided
+- The plan schema and manual form need city → neighborhood lists. Importing `deals.json` in the browser bundle would ship every deal to every visitor, so the cleaning script also writes a small `places.json` (covered by the freshness test).

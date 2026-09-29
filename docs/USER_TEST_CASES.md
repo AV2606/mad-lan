@@ -67,7 +67,8 @@ Legend: 🧑 customer page `/` · 🎧 CSM page `/csm` · 📊 data page `/data`
 
 | ID | Page | Steps | Expected | ✅/❌ | Notes |
 |---|---|---|---|---|---|
-| F1 | 🧑 | `/?simulate=timeout`, ask A1 | Loading shows a stage name. After ~10s: honest message that the text service didn't answer, **plus numbers and the deals table**, explanation labeled "הסבר אוטומטי" (automatic explanation). | | |
+| F1 | 🧑 | `/?simulate=timeout&stage=narrate`, ask A1 | Loading shows a stage name. After ~10s: honest message that the text service didn't answer, **plus numbers and the deals table**, explanation labeled "הסבר אוטומטי" (automatic explanation). | | |
+| F1b | 🧑 | `/?simulate=timeout` (no stage), ask A1 | After ~10s: the same honest message, and the manual search form opens, pre-filled with Givatayim. | | |
 | F2 | 🧑 | `/?simulate=down`, ask A1 | Immediate honest message; the manual search form opens. | | |
 | F3 | 🧑 | `/?simulate=ratelimit`, ask A1 | "temporary load" message; manual form available. | | |
 | F4 | 🧑 | `/?simulate=invalid`, ask A1 | "couldn't understand reliably" + manual form. Debug panel shows `bad_output` after 1 retry. | | |
@@ -80,7 +81,7 @@ Legend: 🧑 customer page `/` · 🎧 CSM page `/csm` · 📊 data page `/data`
 
 | ID | Page | Steps | Expected | ✅/❌ | Notes |
 |---|---|---|---|---|---|
-| G1 | 🎧 | Receipt link from A1 + `אמרתם שהדירה שווה 4 מיליון אבל מכרתי דירה דומה ברחוב סוקולוב ב-5.2 מיליון לפני חודש!` (you said it's worth 4 million but I sold a similar apartment on Sokolov St. for 5.2 million a month ago!) | Replayed answer; automatic checks; likely cause says the customer's deal is not in the data (no ₪5.2M match); polite Hebrew reply draft; no invented numbers. | | |
+| G1 | 🎧 | Receipt link from A1 + `אמרתם שהדירה שווה 4 מיליון אבל מכרתי דירה דומה ברחוב סוקולוב ב-5.2 מיליון לפני חודש!` (you said it's worth 4 million but I sold a similar apartment on Sokolov St. for 5.2 million a month ago!) | Replayed answer; automatic checks include a **hedged** match: D100284 (Sokolov, Givatayim, ₪5,157,000, 07/2025), "כנראה", included in the calculation. The reply doesn't confirm "we said 4 million" (the app showed a range; 4.2M was the user's own asking price), doesn't say "average", and has no invented numbers. | | |
 | G2 | 🎧 | Receipt for D5 + `המחיר שלכם לא נכון, הדירה ברחוב ביאליק נמכרה ב-5,343,137` (your price is wrong, the Bialik St. apartment sold for 5,343,137) | Finds D100032's excluded broker record; explains that the owner-reported price was used instead. | | |
 | G3 | 🎧 | Receipt for C4-type (widened) answer + `זה בכלל לא המחיר בשכונה שלי` (that's not the price in my neighborhood at all) | Cause = widened to city / small sample; reply explains that in plain words. | | |
 | G4 | 🎧 | Receipt + `אתם גרועים` (you're terrible; no facts) | Doesn't invent a cause. Reply asks for details (address, date, price) politely. | | |

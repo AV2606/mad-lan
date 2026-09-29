@@ -33,7 +33,7 @@ callGroq<T>({ rid, stage, messages, schema, zod, simulate }): Promise<
 | investigate (LLM #3) | automatic checks + template reply |
 | F3 throws (bug) | "משהו השתבש אצלנו. קוד לבירור: R-…" (something went wrong on our side; reference code: R-…) and an error log with a stack trace. Never a raw stack trace in the UI |
 
-**Client side:** `fetch` with its own 20s abort, so the spinner can never spin forever. The loading state names the stage ("מבין את השאלה…", understanding the question…; "מחשב…", calculating…).
+**Client side:** `fetch` with its own 25s abort (server worst case is 2 × 10s, DILEMMAS #27), so the spinner can never spin forever. The loading state names the stage ("מבין את השאלה…", understanding the question…; "מחשב…", calculating…).
 
 ## Failure simulation: for the demo and the "show us the model failing" moment
 
@@ -48,6 +48,8 @@ Query param `?simulate=` on `/` and `/csm`, forwarded to the API:
 | `hallucinate` | narration returns a sentence with an invented number → the number guard rejects it |
 
 Simulation replaces the HTTP call only; everything downstream is real code. It's allowed in production on purpose (demo app).
+
+`?simulate=` hits every model call, so parse fails first and the manual form opens. Add `&stage=narrate` (or `&stage=parse`) to aim it at one call: with `stage=narrate` the parse works and you see full numbers with the template explanation (DILEMMAS #24). Requests that carry a plan (manual form, receipt links) make no model call at all (DILEMMAS #23).
 
 ## Logging (src/lib/log.ts)
 

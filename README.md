@@ -14,7 +14,7 @@ Built for the Madlan R&D Operations Engineer challenge ([brief](docs/challenge.m
 | [docs/USER_TEST_CASES.md](docs/USER_TEST_CASES.md) | Manual test checklist against the live app |
 | [docs/AI_LOG.md](docs/AI_LOG.md) | How AI was used, including caught bad answers |
 | [docs/AI_PROMPTS_LOG.md](docs/AI_PROMPTS_LOG.md) | Raw prompt log (auto-appended by `.claude/hooks/log-prompt.mjs`) |
-| docs/CSM_GUIDE.md | One-page guide for Customer Success (to be written after the build) |
+| [docs/CSM_GUIDE.md](docs/CSM_GUIDE.md) | One-page guide for Customer Success (Hebrew) |
 
 ## Run locally
 
@@ -22,7 +22,8 @@ Built for the Madlan R&D Operations Engineer challenge ([brief](docs/challenge.m
 npm install
 cp .env.example .env.local    # set GROQ_API_KEY
 npm run data                  # regenerate src/data/*.json from data/madlan_deals_sample.csv
-npm test
+npm test                      # 250 tests, no network
+npm run eval                  # live parse eval against Groq (needs GROQ_API_KEY), not in CI
 npm run dev
 ```
 
@@ -30,6 +31,6 @@ Env: `GROQ_API_KEY` (required), `GROQ_MODEL` (optional, default `openai/gpt-oss-
 
 ## Demo notes
 
-- Failure simulation: add `?simulate=timeout|down|ratelimit|invalid|hallucinate` to `/` or `/csm`.
+- Failure simulation: add `?simulate=timeout|down|ratelimit|invalid|hallucinate` to `/` or `/csm`. Add `&stage=narrate` to keep the parse working and fail only the explanation (numbers stay).
 - A "פרטים טכניים" (technical details) panel under each answer shows the plan, timings and any failure kind.
 - Both are on in production on purpose, for the evaluation. In a real product they would be internal-only.

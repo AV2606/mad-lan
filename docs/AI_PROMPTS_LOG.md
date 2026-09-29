@@ -28,3 +28,11 @@ The first two entries were backfilled by hand, because the hook was created duri
 > dont use claude since i want this to be relatively easy and cheap for me to do (i have already a groq subscription)
 > dont keep room for changes and future development as normally done in production grade code when this will accelerate development
 > document your dilemas
+
+---
+
+### 2026-09-29 13:00:44 UTC · session `00038520`
+
+> start implementing the project
+> make sure to ask everything when not sure
+> see dilemas.md file to guide you
