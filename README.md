@@ -1,36 +1,35 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# מאיפה המספר הזה? (Where does this number come from?)
 
-## Getting Started
+A Hebrew, RTL price-check tool over Israeli residential deals, where every number comes with a receipt: the deals behind it, what was excluded and why, and how much to trust it. A CSM mode turns a receipt plus a customer complaint into an explanation and a reply draft.
 
-First, run the development server:
+Built for the Madlan R&D Operations Engineer challenge ([brief](docs/challenge.md)).
+
+## Docs
+
+| Doc | What's in it |
+|---|---|
+| [docs/PLAN.md](docs/PLAN.md) | Pitch, stack, file layout, milestones, what was cut |
+| [docs/features/](docs/features/) | One spec per feature (F1–F7) |
+| [docs/DILEMMAS.md](docs/DILEMMAS.md) | Every non-obvious decision and assumption |
+| [docs/USER_TEST_CASES.md](docs/USER_TEST_CASES.md) | Manual test checklist against the live app |
+| [docs/AI_LOG.md](docs/AI_LOG.md) | How AI was used, including caught bad answers |
+| [docs/AI_PROMPTS_LOG.md](docs/AI_PROMPTS_LOG.md) | Raw prompt log (auto-appended by `.claude/hooks/log-prompt.mjs`) |
+| docs/CSM_GUIDE.md | One-page guide for Customer Success (to be written after the build) |
+
+## Run locally
 
 ```bash
+npm install
+cp .env.example .env.local    # set GROQ_API_KEY
+npm run data                  # regenerate src/data/*.json from data/madlan_deals_sample.csv
+npm test
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Env: `GROQ_API_KEY` (required), `GROQ_MODEL` (optional, default `openai/gpt-oss-120b`).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Demo notes
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Failure simulation: add `?simulate=timeout|down|ratelimit|invalid|hallucinate` to `/` or `/csm`.
+- A "פרטים טכניים" (technical details) panel under each answer shows the plan, timings and any failure kind.
+- Both are on in production on purpose, for the evaluation. In a real product they would be internal-only.
