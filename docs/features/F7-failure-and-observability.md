@@ -24,6 +24,8 @@ callGroq<T>({ rid, stage, messages, schema, zod, simulate }): Promise<
 | `guard_rejected` | number guard failed (F4) | no user-facing error; template text shown, labeled "הסבר אוטומטי" (automatic explanation) |
 | `config` | missing key / 401 | "התצורה של השרת חסרה. פנו לצוות." (server configuration is missing; contact the team) + log at error level |
 
+The table above is the wording when **narration** fails (numbers exist). When **parsing** fails there are no numbers yet, so `PARSE_FAILURE_MESSAGE_HE` in templates.ts is used instead: it says the question-understanding service failed and points to the manual search, and never mentions numbers or an automatic explanation.
+
 ## Where each failure lands
 
 | Stage fails | User still gets |

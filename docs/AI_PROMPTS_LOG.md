@@ -36,3 +36,19 @@ The first two entries were backfilled by hand, because the hook was created duri
 > start implementing the project
 > make sure to ask everything when not sure
 > see dilemas.md file to guide you
+
+---
+
+### 2026-09-30 19:23:51 UTC · session `00038520`
+
+> i added some fixes needed
+> mentioned them in the user test cases md
+> fix them (should be very small changes)
+> prompt me if anything is yet to be done
+
+---
+
+### 2026-09-30 19:29:21 UTC · session `00038520`
+
+> f1b isnt fixed the text is still שירות הניסוח לא ענה בזמן. הנה המספרים עם הסבר אוטומטי. but there are no numbers
+> use different message for the case where a manual search is given

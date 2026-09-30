@@ -87,14 +87,16 @@ describe("/api/ask with a question", () => {
     expect(r.planNotes.join(" ")).toContain("פלורנטין");
   });
 
-  it("simulate=down hits both stages: parsing fails first, so the manual form opens pre-filled", async () => {
+  it("simulate=down hits both stages: parsing fails first, so the manual form opens", async () => {
     const fn = mockModel({});
     const r = (await ask({ question: Q, simulate: "down" })) as Ok;
     expect(r.outcome).toBe("parse_failed");
     expect(r.failure).toBe("unavailable");
     expect(r.showManualForm).toBe(true);
-    expect(r.message).toContain("שירות הניסוח לא זמין");
-    expect(r.prefill).toEqual({ city: "גבעתיים" });
+    expect(r.message).toContain("שירות הבנת השאלה לא זמין");
+    // no numbers exist yet, so the message must not promise any
+    expect(r.message).not.toContain("המספרים");
+    expect(r.message).not.toContain("הסבר אוטומטי");
     expect(fn).not.toHaveBeenCalled();
   });
 

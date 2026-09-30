@@ -68,11 +68,11 @@ Legend: 🧑 customer page `/` · 🎧 CSM page `/csm` · 📊 data page `/data`
 | ID | Page | Steps | Expected | ✅/❌ | Notes |
 |---|---|---|---|---|---|
 | F1 | 🧑 | `/?simulate=timeout&stage=narrate`, ask A1 | Loading shows a stage name. After ~10s: honest message that the text service didn't answer, **plus numbers and the deals table**, explanation labeled "הסבר אוטומטי" (automatic explanation). | | |
-| F1b | 🧑 | `/?simulate=timeout` (no stage), ask A1 | After ~10s: the same honest message, and the manual search form opens, pre-filled with Givatayim. | | |
+| F1b | 🧑 | `/?simulate=timeout` (no stage), ask A1 | After ~10s: an honest message that the question-understanding service didn't answer (no mention of numbers or an automatic explanation, since none exist yet), and the manual search form opens. | | |
 | F2 | 🧑 | `/?simulate=down`, ask A1 | Immediate honest message; the manual search form opens. | | |
 | F3 | 🧑 | `/?simulate=ratelimit`, ask A1 | "temporary load" message; manual form available. | | |
 | F4 | 🧑 | `/?simulate=invalid`, ask A1 | "couldn't understand reliably" + manual form. Debug panel shows `bad_output` after 1 retry. | | |
-| F5 | 🧑 | `/?simulate=hallucinate`, ask A1 | Numbers normal; explanation is the template, labeled "הסבר אוטומטי". Debug/log shows `guard_rejected` with the invented number. | | |
+| F5 | 🧑 | `/?simulate=hallucinate`, ask A1 | Numbers normal; explanation is the template, labeled "הסבר אוטומטי". Debug/log shows `guard_rejected` with the invented number. | x|doesnt work as intended |
 | F6 | 🧑 | Manual form (no LLM): pick city + rooms, submit | Full answer without any Groq call (debug panel: no parse stage). | | |
 | F7 | 🧑 | DevTools → Network → Offline, then ask | Within 20s: message that the connection failed. The spinner stops. | | |
 | F8 | 🧑 | (Local only) remove `GROQ_API_KEY`, ask | Configuration message; manual form still works. | | |

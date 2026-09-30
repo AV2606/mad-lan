@@ -16,6 +16,14 @@ export const FAILURE_MESSAGE_HE: Record<FailureKind, string> = {
   config: "התצורה של השרת חסרה. פנו לצוות.",
 };
 
+/** When the question itself couldn't be understood there are no numbers yet, so these never promise any. */
+export const PARSE_FAILURE_MESSAGE_HE: Record<FailureKind, string> = {
+  ...FAILURE_MESSAGE_HE,
+  timeout: "שירות הבנת השאלה לא ענה בזמן. אפשר לנסות שוב, או לחפש ידנית:",
+  rate_limited: "יש עומס זמני על שירות הבנת השאלה. אפשר לנסות שוב בעוד רגע, או לחפש ידנית:",
+  unavailable: "שירות הבנת השאלה לא זמין כרגע. אפשר לחפש ידנית:",
+};
+
 export const INTERNAL_ERROR_HE = (rid: string) => `משהו השתבש אצלנו. קוד לבירור: ${rid}`;
 export const AUTO_EXPLANATION_LABEL_HE = "הסבר אוטומטי";
 

@@ -117,9 +117,7 @@ export function AskClient({
 
       {showManual ? (
         <ManualForm
-          key={result?.prefill?.city ?? "none"}
           disabled={busy !== null}
-          prefillCity={result?.prefill?.city}
           onSubmit={(plan: QueryPlan) => void send({ plan }, false)}
         />
       ) : null}

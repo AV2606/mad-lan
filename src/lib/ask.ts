@@ -1,5 +1,4 @@
 import rawDeals from "../data/deals.json";
-import { CITY_ALIASES } from "./clean";
 import { MIN_DEALS, compareAreas, findComps, latestDealDate } from "./comps";
 import type { CompareResult, CompsQuery, CompsResult } from "./comps";
 import { compareFacts, estimateFacts } from "./facts";
@@ -12,7 +11,7 @@ import { LlmPlanSchema, PLAN_JSON_SCHEMA, QueryPlanSchema, sanitizePlan } from "
 import type { QueryPlan } from "./plan";
 import { buildNarrateMessages, buildParseMessages } from "./prompts";
 import { DATASET_VERSION, codeForText, encodeReceipt } from "./receipt";
-import { FAILURE_MESSAGE_HE, INTERNAL_ERROR_HE, narrationTemplate, unsupportedMessage } from "./templates";
+import { FAILURE_MESSAGE_HE, INTERNAL_ERROR_HE, PARSE_FAILURE_MESSAGE_HE, narrationTemplate, unsupportedMessage } from "./templates";
 import type { Deal } from "./types";
 import { z } from "zod";
 
@@ -55,7 +54,6 @@ export type AskResponse =
       message: string | null;
       failure: FailureKind | null;
       showManualForm: boolean;
-      prefill: { city: string } | null;
       answer:
         | { kind: "single"; query: CompsQuery; comps: CompsResult }
         | { kind: "compare"; queries: [CompsQuery, CompsQuery]; compare: CompareResult }
@@ -68,12 +66,6 @@ export type AskResponse =
 
 /** `simulateStage` limits a simulated failure to one model call, so "parse works, narration fails" can be demoed. */
 export type AskInput = { question?: unknown; plan?: unknown; simulate?: unknown; simulateStage?: unknown };
-
-const cityGuess = (text: string): string | null => {
-  const names = Object.keys(CITY_ALIASES).sort((a, b) => b.length - a.length);
-  const hit = names.find((n) => text.includes(n));
-  return hit ? CITY_ALIASES[hit] : null;
-};
 
 function queriesFor(plan: QueryPlan): CompsQuery[] {
   const base = { propertyType: plan.propertyType, rooms: plan.rooms };
@@ -120,11 +112,10 @@ export async function ask(input: AskInput): Promise<AskResponse> {
       });
       if (!parse.ok) {
         stages.push({ stage: "parse", ok: false, latencyMs: parse.latencyMs, kind: parse.kind, detail: parse.detail, raw: parse.raw });
-        const guess = cityGuess(question);
         return finish(rid, stages, {
           ok: true, rid, receipt: null, plan: null, planNotes: [], outcome: "parse_failed",
-          message: FAILURE_MESSAGE_HE[parse.kind], failure: parse.kind, showManualForm: true,
-          prefill: guess ? { city: guess } : null, answer: null, facts: null, narration: null,
+          message: PARSE_FAILURE_MESSAGE_HE[parse.kind], failure: parse.kind, showManualForm: true,
+          answer: null, facts: null, narration: null,
           debug: { stages, datasetVersion: DATASET_VERSION, simulate, question: clip(question) },
         });
       }
@@ -137,7 +128,7 @@ export async function ask(input: AskInput): Promise<AskResponse> {
     const receipt = encodeReceipt(plan);
     rid = receipt.code;
     const debug = { stages, datasetVersion: DATASET_VERSION, simulate, question: question === null ? null : clip(question) };
-    const base = { ok: true as const, rid, receipt: { code: receipt.code, token: receipt.token }, plan, planNotes, debug, prefill: null };
+    const base = { ok: true as const, rid, receipt: { code: receipt.code, token: receipt.token }, plan, planNotes, debug };
 
     if (plan.intent === "unsupported") {
       return finish(rid, stages, {

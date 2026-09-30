@@ -7,13 +7,12 @@ import { PROPERTY_TYPES } from "@/lib/types";
 
 /** The no-AI path: builds a plan directly. Always reachable, and opened automatically when the model fails. */
 export function ManualForm({
-  onSubmit, disabled, prefillCity,
+  onSubmit, disabled,
 }: {
   onSubmit: (plan: QueryPlan) => void;
   disabled: boolean;
-  prefillCity?: string | null;
 }) {
-  const [city, setCity] = useState(prefillCity && CITIES.includes(prefillCity) ? prefillCity : "");
+  const [city, setCity] = useState("");
   const [hood, setHood] = useState("");
   const [type, setType] = useState("");
   const [rooms, setRooms] = useState("");
