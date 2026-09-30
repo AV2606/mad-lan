@@ -19,7 +19,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body>
         {children}
         <footer className="site-footer">
-          <Link href="/data">מה אנחנו יודעים על הנתונים</Link> · <Link href="/csm">מצב נציג שירות</Link>
+          <Link href="/data">מה אנחנו יודעים על הנתונים</Link> · <Link href="/csm">מצב נציג שירות</Link> · <Link href="/guide">מדריך לנציג שירות</Link>
         </footer>
       </body>
     </html>

@@ -52,3 +52,10 @@ The first two entries were backfilled by hand, because the hook was created duri
 
 > f1b isnt fixed the text is still שירות הניסוח לא ענה בזמן. הנה המספרים עם הסבר אוטומטי. but there are no numbers
 > use different message for the case where a manual search is given
+
+---
+
+### 2026-09-30 19:34:54 UTC · session `00038520`
+
+> as i see again the requierments its seems that we left out a guide page for the csm
+> please include one even tho the app is very easy to use, include screenshots, if you cant leave placeholders for me to add

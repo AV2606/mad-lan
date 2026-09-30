@@ -1,0 +1,38 @@
+{
+  "ask": {
+    "width": 848,
+    "height": 290
+  },
+  "answer": {
+    "width": 806,
+    "height": 690
+  },
+  "excluded": {
+    "width": 806,
+    "height": 176
+  },
+  "receipt": {
+    "width": 806,
+    "height": 44
+  },
+  "csm-form": {
+    "width": 848,
+    "height": 349
+  },
+  "csm-seen": {
+    "width": 848,
+    "height": 1153
+  },
+  "csm-checks": {
+    "width": 848,
+    "height": 542
+  },
+  "csm-draft": {
+    "width": 848,
+    "height": 586
+  },
+  "manual": {
+    "width": 880,
+    "height": 832
+  }
+}

@@ -14,7 +14,7 @@ Built for the Madlan R&D Operations Engineer challenge ([brief](docs/challenge.m
 | [docs/USER_TEST_CASES.md](docs/USER_TEST_CASES.md) | Manual test checklist against the live app |
 | [docs/AI_LOG.md](docs/AI_LOG.md) | How AI was used, including caught bad answers |
 | [docs/AI_PROMPTS_LOG.md](docs/AI_PROMPTS_LOG.md) | Raw prompt log (auto-appended by `.claude/hooks/log-prompt.mjs`) |
-| [docs/CSM_GUIDE.md](docs/CSM_GUIDE.md) | One-page guide for Customer Success (Hebrew) |
+| [docs/CSM_GUIDE.md](docs/CSM_GUIDE.md) | One-page guide for Customer Success (Hebrew). Also in the app at `/guide`, with screenshots (`public/guide/*.png`, sizes in `src/app/guide/shots.json`) |
 
 ## Run locally
 

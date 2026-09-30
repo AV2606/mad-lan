@@ -16,6 +16,7 @@ export default async function CsmPage({ searchParams }: { searchParams: SearchPa
       <p className="lead">
         לקוח כתב שהמספר לא נכון? הדביקו את הקישור לתשובה שהוא ראה ואת ההודעה שלו. תקבלו מה הוא ראה, למה, ומה כנראה קרה, יחד עם טיוטת תשובה.
       </p>
+      <p className="lead">פעם ראשונה? <Link href="/guide">המדריך לנציג שירות</Link>, עם צילומי מסך.</p>
       <CsmClient simulate={simulate} />
     </main>
   );
