@@ -40,41 +40,41 @@ export function ManualForm({
   }
 
   return (
-    <form className="manual" onSubmit={submit}>
-      <label>
+    <form id="manual-form" className="manual" onSubmit={submit}>
+      <label id="manual-city-label">
         עיר
-        <select value={city} onChange={(e) => { setCity(e.target.value); setHood(""); }} required>
-          <option value="">בחרו עיר</option>
-          {CITIES.map((c) => <option key={c}>{c}</option>)}
+        <select id="manual-city-select" value={city} onChange={(e) => { setCity(e.target.value); setHood(""); }} required>
+          <option id="manual-city-placeholder-option" value="">בחרו עיר</option>
+          {CITIES.map((c, i) => <option key={c} id={`manual-city-option-${i + 1}`}>{c}</option>)}
         </select>
       </label>
-      <label>
+      <label id="manual-neighborhood-label">
         שכונה (אופציונלי)
-        <select value={hood} onChange={(e) => setHood(e.target.value)} disabled={!city}>
-          <option value="">כל העיר</option>
-          {(NEIGHBORHOODS[city] ?? []).map((n) => <option key={n}>{n}</option>)}
+        <select id="manual-neighborhood-select" value={hood} onChange={(e) => setHood(e.target.value)} disabled={!city}>
+          <option id="manual-neighborhood-all-option" value="">כל העיר</option>
+          {(NEIGHBORHOODS[city] ?? []).map((n, i) => <option key={n} id={`manual-neighborhood-option-${i + 1}`}>{n}</option>)}
         </select>
       </label>
-      <label>
+      <label id="manual-type-label">
         סוג נכס
-        <select value={type} onChange={(e) => setType(e.target.value)}>
-          <option value="">הכול</option>
-          {PROPERTY_TYPES.map((t) => <option key={t}>{t}</option>)}
+        <select id="manual-type-select" value={type} onChange={(e) => setType(e.target.value)}>
+          <option id="manual-type-all-option" value="">הכול</option>
+          {PROPERTY_TYPES.map((t, i) => <option key={t} id={`manual-type-option-${i + 1}`}>{t}</option>)}
         </select>
       </label>
-      <label>
+      <label id="manual-rooms-label">
         חדרים
-        <input inputMode="decimal" value={rooms} onChange={(e) => setRooms(e.target.value)} placeholder="למשל 3.5" />
+        <input id="manual-rooms-input" inputMode="decimal" value={rooms} onChange={(e) => setRooms(e.target.value)} placeholder="למשל 3.5" />
       </label>
-      <label>
+      <label id="manual-size-label">
         שטח במ״ר
-        <input inputMode="numeric" value={size} onChange={(e) => setSize(e.target.value)} placeholder="למשל 90" />
+        <input id="manual-size-input" inputMode="numeric" value={size} onChange={(e) => setSize(e.target.value)} placeholder="למשל 90" />
       </label>
-      <label>
+      <label id="manual-asking-label">
         מחיר מבוקש בש״ח
-        <input inputMode="numeric" value={asking} onChange={(e) => setAsking(e.target.value)} placeholder="למשל 4200000" />
+        <input id="manual-asking-input" inputMode="numeric" value={asking} onChange={(e) => setAsking(e.target.value)} placeholder="למשל 4200000" />
       </label>
-      <button type="submit" disabled={disabled || !city}>חשב</button>
+      <button id="manual-submit-button" type="submit" disabled={disabled || !city}>חשב</button>
     </form>
   );
 }

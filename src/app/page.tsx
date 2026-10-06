@@ -30,10 +30,10 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
   }
 
   return (
-    <main className="page">
-      <header>
-        <h1>מאיפה המספר הזה?</h1>
-        <p className="lead">בדיקת מחיר דירה שבה כל מספר מגיע עם קבלה: העסקאות שעליהן הוא מבוסס, מה לא נכלל, ועד כמה אפשר לסמוך עליו.</p>
+    <main id="home-page" className="page">
+      <header id="home-header">
+        <h1 id="home-title">מאיפה המספר הזה?</h1>
+        <p id="home-lead" className="lead">בדיקת מחיר דירה שבה כל מספר מגיע עם קבלה: העסקאות שעליהן הוא מבוסס, מה לא נכלל, ועד כמה אפשר לסמוך עליו.</p>
       </header>
       <AskClient initial={initial} initialError={initialError} stale={stale} simulate={simulate} stage={stage} />
     </main>

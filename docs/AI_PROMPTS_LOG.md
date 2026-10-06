@@ -59,3 +59,16 @@ The first two entries were backfilled by hand, because the hook was created duri
 
 > as i see again the requierments its seems that we left out a guide page for the csm
 > please include one even tho the app is very easy to use, include screenshots, if you cant leave placeholders for me to add
+
+---
+
+### 2026-10-05 10:20:08 UTC · session `00038520`
+
+> what does MAD and IQR means?
+
+---
+
+### 2026-10-06 10:54:59 UTC · session `3761f0dd`
+
+> i am going to present this project today
+> add unique ids to each text and clickable element to make it easy to show code snippets

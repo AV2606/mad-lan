@@ -84,10 +84,10 @@ export function AskClient({
 
   return (
     <>
-      <form onSubmit={onSubmit} className="ask">
-        <label htmlFor="q">מה תרצו לבדוק?</label>
+      <form id="ask-form" onSubmit={onSubmit} className="ask">
+        <label id="ask-question-label" htmlFor="ask-question-input">מה תרצו לבדוק?</label>
         <textarea
-          id="q"
+          id="ask-question-input"
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
           onKeyDown={(e) => {
@@ -96,24 +96,24 @@ export function AskClient({
           rows={3}
           placeholder="למשל: דירת 4 חדרים בגבעתיים, 100 מ״ר, ביקשו ממני 4.2 מיליון. זה הגיוני?"
         />
-        <div className="chips">
-          {EXAMPLE_QUESTIONS_HE.map((ex) => (
-            <button key={ex} type="button" className="chip" onClick={() => setQuestion(ex)}>{ex}</button>
+        <div id="ask-example-chips" className="chips">
+          {EXAMPLE_QUESTIONS_HE.map((ex, i) => (
+            <button key={ex} id={`ask-example-chip-${i + 1}`} type="button" className="chip" onClick={() => setQuestion(ex)}>{ex}</button>
           ))}
         </div>
-        <div className="row">
-          <button type="submit" disabled={busy !== null}>{busy ? "בודק…" : "בדיקה"}</button>
-          <button type="button" className="link-button" onClick={() => setShowManual((v) => !v)}>חיפוש ידני</button>
+        <div id="ask-actions" className="row">
+          <button id="ask-submit-button" type="submit" disabled={busy !== null}>{busy ? "בודק…" : "בדיקה"}</button>
+          <button id="ask-manual-toggle-button" type="button" className="link-button" onClick={() => setShowManual((v) => !v)}>חיפוש ידני</button>
         </div>
       </form>
 
       {busy ? (
-        <p role="status" className="loading">
+        <p id="ask-loading-status" role="status" className="loading">
           {busy === "understanding" ? "מבין את השאלה…" : "מחשב…"}
         </p>
       ) : null}
 
-      {error ? <p role="alert" className="notice notice-bad">{error}</p> : null}
+      {error ? <p id="ask-error-message" role="alert" className="notice notice-bad">{error}</p> : null}
 
       {showManual ? (
         <ManualForm

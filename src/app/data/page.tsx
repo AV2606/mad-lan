@@ -34,30 +34,30 @@ const MISSING = [
 export default function DataPage() {
   const dateRange = `${report.dateRange.from} עד ${report.dateRange.to}`;
   return (
-    <main className="page">
-      <p><Link href="/">← חזרה לבדיקת מחיר</Link></p>
-      <h1>מה אנחנו יודעים על הנתונים</h1>
-      <p className="lead">
+    <main id="data-page" className="page">
+      <p id="data-back"><Link id="data-back-link" href="/">← חזרה לבדיקת מחיר</Link></p>
+      <h1 id="data-title">מה אנחנו יודעים על הנתונים</h1>
+      <p id="data-summary" className="lead">
         מתוך <bdi>{report.rawRows}</bdi> שורות בקובץ: <bdi>{report.uniqueDeals}</bdi> עסקאות ייחודיות, ו-<bdi>{report.usableForStats}</bdi> שימשו לחישובי מחיר למ״ר.
         <br />
         תקופה: <bdi>{dateRange}</bdi> · גרסת נתונים: <bdi>{report.datasetVersion}</bdi>
       </p>
 
-      <h2>מה מצאנו בקובץ ומה עשינו</h2>
-      <div className="table-scroll">
-        <table>
-          <thead><tr><th>בעיה</th><th>כמה עסקאות</th><th>מה עשינו</th><th>הסבר</th></tr></thead>
-          <tbody>
+      <h2 id="data-issues-title">מה מצאנו בקובץ ומה עשינו</h2>
+      <div id="data-issues-scroll" className="table-scroll">
+        <table id="data-issues-table">
+          <thead id="data-issues-head"><tr id="data-issues-head-row"><th id="data-issues-th-issue">בעיה</th><th id="data-issues-th-count">כמה עסקאות</th><th id="data-issues-th-action">מה עשינו</th><th id="data-issues-th-explanation">הסבר</th></tr></thead>
+          <tbody id="data-issues-body">
             {report.issues.map((i) => (
-              <tr key={i.flag}>
-                <td>{FLAG_META[i.flag as Flag].labelHe}</td>
-                <td><bdi>{i.count}</bdi></td>
-                <td>{ACTION_HE[i.action]}</td>
-                <td style={{ whiteSpace: "normal", minWidth: 260 }}>
+              <tr key={i.flag} id={`data-issue-${i.flag}`}>
+                <td id={`data-issue-${i.flag}-label`}>{FLAG_META[i.flag as Flag].labelHe}</td>
+                <td id={`data-issue-${i.flag}-count`}><bdi>{i.count}</bdi></td>
+                <td id={`data-issue-${i.flag}-action`}>{ACTION_HE[i.action]}</td>
+                <td id={`data-issue-${i.flag}-explanation`} style={{ whiteSpace: "normal", minWidth: 260 }}>
                   {i.explanationHe}
-                  <details>
-                    <summary>מזהי העסקאות</summary>
-                    <bdi>{i.dealIds.join(", ")}</bdi>
+                  <details id={`data-issue-${i.flag}-deals-details`}>
+                    <summary id={`data-issue-${i.flag}-deals-summary`}>מזהי העסקאות</summary>
+                    <bdi id={`data-issue-${i.flag}-deal-ids`}>{i.dealIds.join(", ")}</bdi>
                   </details>
                 </td>
               </tr>
@@ -66,24 +66,24 @@ export default function DataPage() {
         </table>
       </div>
 
-      <h2>הנחות שלנו</h2>
-      <ul>{ASSUMPTIONS.map((a) => <li key={a}>{a}</li>)}</ul>
+      <h2 id="data-assumptions-title">הנחות שלנו</h2>
+      <ul id="data-assumptions-list">{ASSUMPTIONS.map((a, i) => <li key={a} id={`data-assumption-${i + 1}`}>{a}</li>)}</ul>
 
-      <h2>כמה נתונים יש בכל עיר</h2>
-      <p className="lead">רוב השכונות מכילות מעט עסקאות, ולכן הרבה תשובות מתבססות על כל העיר.</p>
-      <div className="table-scroll">
-        <table>
-          <thead><tr><th>עיר</th><th>עסקאות</th><th>שכונות</th></tr></thead>
-          <tbody>
-            {report.cities.map((c) => (
-              <tr key={c.city}><td>{c.city}</td><td><bdi>{c.deals}</bdi></td><td><bdi>{c.neighborhoods}</bdi></td></tr>
+      <h2 id="data-cities-title">כמה נתונים יש בכל עיר</h2>
+      <p id="data-cities-lead" className="lead">רוב השכונות מכילות מעט עסקאות, ולכן הרבה תשובות מתבססות על כל העיר.</p>
+      <div id="data-cities-scroll" className="table-scroll">
+        <table id="data-cities-table">
+          <thead id="data-cities-head"><tr id="data-cities-head-row"><th id="data-cities-th-city">עיר</th><th id="data-cities-th-deals">עסקאות</th><th id="data-cities-th-neighborhoods">שכונות</th></tr></thead>
+          <tbody id="data-cities-body">
+            {report.cities.map((c, i) => (
+              <tr key={c.city} id={`data-city-${i + 1}`}><td id={`data-city-${i + 1}-name`}>{c.city}</td><td id={`data-city-${i + 1}-deals`}><bdi>{c.deals}</bdi></td><td id={`data-city-${i + 1}-neighborhoods`}><bdi>{c.neighborhoods}</bdi></td></tr>
             ))}
           </tbody>
         </table>
       </div>
 
-      <h2>מה לא נמצא בנתונים</h2>
-      <ul>{MISSING.map((m) => <li key={m}>{m}</li>)}</ul>
+      <h2 id="data-missing-title">מה לא נמצא בנתונים</h2>
+      <ul id="data-missing-list">{MISSING.map((m, i) => <li key={m} id={`data-missing-${i + 1}`}>{m}</li>)}</ul>
     </main>
   );
 }
